@@ -1,0 +1,3867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECLS SAFETY PORTAL - Ethiopian Airlines Cargo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .login-title {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo i {
+            font-size: 60px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        /* Home Page Styles */
+        .home-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .home-title {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .home-subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .pillars-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .pillar-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pillar-box:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .pillar-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .pillar-subitems {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .pillar-subitems li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pillar-subitems li:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+
+        .pillar-subitems li:last-child {
+            border-bottom: none;
+        }
+
+        /* Main Application Styles */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1f77b4, #2e86ab);
+            color: white;
+            padding: 25px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-titles h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header-titles p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-details {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .nav {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 2px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-width: max-content;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 2px solid #1f77b4;
+            color: #1f77b4;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #1f77b4;
+            color: white;
+        }
+
+        .content {
+            padding: 25px;
+            min-height: 500px;
+            overflow-x: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .table-container {
+            max-height: 600px;
+            overflow: auto;
+            margin: 20px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #1f77b4;
+            position: sticky;
+            top: 0;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-progress {
+            background: #cce7ff;
+            color: #004085;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .risk-high {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .risk-medium {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .risk-low {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #1f77b4;
+            outline: none;
+        }
+
+        .btn {
+            background: #1f77b4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #155a8a;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .upload-dashboard-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .upload-instructions {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .upload-instructions h4 {
+            color: #1f77b4;
+            margin-bottom: 10px;
+        }
+
+        .upload-instructions ul {
+            margin-left: 20px;
+        }
+
+        .upload-instructions li {
+            margin-bottom: 5px;
+        }
+
+        .dashboard-upload-form {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-upload-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .dashboard-preview {
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            background: white;
+        }
+
+        .dashboard-preview h4 {
+            color: #1f77b4;
+            margin-bottom: 10px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            max-height: 300px;
+            overflow: auto;
+            display: block;
+        }
+
+        .preview-table th, .preview-table td {
+            padding: 4px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        .preview-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .full-preview-container {
+            max-height: 500px;
+            overflow: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .hazard-link {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background 0.3s ease;
+        }
+
+        .hazard-link:hover {
+            background: #c82333;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1f77b4;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .indicator-key {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .indicator-key h4 {
+            color: #1f77b4;
+            margin-bottom: 10px;
+        }
+
+        .indicator-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .indicator-item {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .indicator-name {
+            font-weight: bold;
+            color: #1f77b4;
+        }
+
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .chart-card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #1f77b4;
+        }
+
+        .performance-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .performance-bar {
+            flex: 1;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.5s ease;
+        }
+
+        .performance-value {
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .performance-excellent {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+
+        .performance-good {
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+        }
+
+        .performance-poor {
+            background: linear-gradient(90deg, #dc3545, #e83e8c);
+        }
+
+        .dashboard-performance {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-performance-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #1f77b4;
+        }
+
+        .dashboard-performance-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #1f77b4;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .pillars-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                text-align: center;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 10px;
+            }
+            
+            .table th, .table td {
+                padding: 6px 3px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .dashboard-upload-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <h1 class="login-title">ECLS SAFETY PORTAL</h1>
+        <p class="login-subtitle">Ethiopian Airlines Cargo and Logistics Services Division</p>
+        
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Secure Sign In</h2>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 20px;">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                <h4>Demo Credentials:</h4>
+                <p><strong>Username:</strong> admin</p>
+                <p><strong>Password:</strong> safety2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="home-container" style="display: none;">
+        <h1 class="home-title">ECLS SAFETY PORTAL</h1>
+        <p class="home-subtitle">Ethiopian Airlines Cargo and Logistics Services Division Safety Portal</p>
+        
+        <div class="pillars-container">
+            <!-- Pillar 1: Hazard and Occurrence Management -->
+            <div class="pillar-box" onclick="showSection('hazard')">
+                <div class="pillar-title">Hazard and Occurrence Management</div>
+                <ul class="pillar-subitems">
+                    <li onclick="event.stopPropagation(); showSection('risk')">Risk Assessment</li>
+                    <li onclick="event.stopPropagation(); showSection('occurrences')">Occurrences</li>
+                </ul>
+            </div>
+            
+            <!-- Pillar 2: Safety Policy & Management Review -->
+            <div class="pillar-box" onclick="showSection('safety-policy')">
+                <div class="pillar-title">Safety Policy & Management Review</div>
+                <ul class="pillar-subitems">
+                    <li onclick="event.stopPropagation(); showSection('sag')">SAG</li>
+                    <li onclick="event.stopPropagation(); showSection('monthly-dashboard')">Monthly SMS & QMS Dashboard</li>
+                    <li onclick="event.stopPropagation(); showSection('moc')">MOC</li>
+                </ul>
+            </div>
+            
+            <!-- Pillar 3: Safety Assurance -->
+            <div class="pillar-box" onclick="showSection('safety-assurance')">
+                <div class="pillar-title">Safety Assurance</div>
+                <ul class="pillar-subitems">
+                    <li onclick="event.stopPropagation(); showSection('audits')">Audits</li>
+                    <li onclick="event.stopPropagation(); showSection('spi')">SPI</li>
+                    <li onclick="event.stopPropagation(); showSection('outstation')">Outstation</li>
+                    <li onclick="event.stopPropagation(); showSection('isarps')">ISARPS List</li>
+                    <li onclick="event.stopPropagation(); showSection('evidences')">Evidences</li>
+                </ul>
+            </div>
+            
+            <!-- Pillar 4: Safety Promotion -->
+            <div class="pillar-box" onclick="showSection('safety')">
+                <div class="pillar-title">Safety Promotion</div>
+                <ul class="pillar-subitems">
+                    <li onclick="event.stopPropagation(); showSection('safety')">Safety Activities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="header-titles">
+                    <h1>ECLS SAFETY PORTAL</h1>
+                    <p>Ethiopian Airlines Cargo and Logistics Services Division Safety Portal</p>
+                </div>
+                <div class="user-info">
+                    <span class="user-details" id="userDisplay">Welcome, User</span>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <button class="btn btn-info" onclick="showHomePage()">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="nav-btn" onclick="showSection('hazard')">
+                    <i class="fas fa-exclamation-triangle"></i> Hazard Management
+                </button>
+                <button class="nav-btn" onclick="showSection('risk')">
+                    <i class="fas fa-bullseye"></i> Risk Assessment
+                </button>
+                <button class="nav-btn" onclick="showSection('occurrences')">
+                    <i class="fas fa-clipboard-list"></i> Occurrences
+                </button>
+                <button class="nav-btn" onclick="showSection('sag')">
+                    <i class="fas fa-users"></i> SAG
+                </button>
+                <button class="nav-btn" onclick="showSection('monthly-dashboard')">
+                    <i class="fas fa-chart-line"></i> Monthly Dashboard
+                </button>
+                <button class="nav-btn" onclick="showSection('moc')">
+                    <i class="fas fa-exchange-alt"></i> MOC
+                </button>
+                <button class="nav-btn" onclick="showSection('audits')">
+                    <i class="fas fa-search"></i> Audits
+                </button>
+                <button class="nav-btn" onclick="showSection('spi')">
+                    <i class="fas fa-chart-bar"></i> SPI
+                </button>
+                <button class="nav-btn" onclick="showSection('outstation')">
+                    <i class="fas fa-building"></i> Outstation
+                </button>
+                <button class="nav-btn" onclick="showSection('isarps')">
+                    <i class="fas fa-list"></i> ISARPS List
+                </button>
+                <button class="nav-btn" onclick="showSection('evidences')">
+                    <i class="fas fa-file-alt"></i> Evidences
+                </button>
+                <button class="nav-btn" onclick="showSection('safety')">
+                    <i class="fas fa-bullhorn"></i> Safety Promotion
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-number" id="totalIsarps">0</div>
+                        <div class="metric-label">Total ISARPS</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number" id="completedIsarps">0</div>
+                        <div class="metric-label">Completed</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number" id="progressIsarps">0</div>
+                        <div class="metric-label">In Progress</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number" id="pendingIsarps">0</div>
+                        <div class="metric-label">Pending</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Implementation Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText">0% Complete (0 of 0 ISARPS implemented)</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <div class="chart-title">Occurrence Trend</div>
+                        <canvas id="occurrenceChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">SPI Trend</div>
+                        <canvas id="spiChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Recent Activities</h3>
+                    <ul id="recentActivities" style="list-style: none; padding: 0;">
+                        <li style="padding: 10px; border-bottom: 1px solid #eee;">No activities yet</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Hazard Management Section -->
+            <div id="hazard" class="section">
+                <h2><i class="fas fa-exclamation-triangle"></i> Hazard Management</h2>
+                <div class="card">
+                    <h3>Safety Risk Management (SRM) System</h3>
+                    <p>The Hazard Management module is integrated with our Safety Risk Management (SRM) system. Click the link below to access the full SRM application:</p>
+                    <a href="https://srm-system.company.com" class="hazard-link" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Access SRM System
+                    </a>
+                    <p>Alternatively, you can manage specific risk assessments and occurrences through the dedicated sections in this portal:</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="showSection('risk')">
+                            <i class="fas fa-bullseye"></i> Go to Risk Assessment
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('occurrences')">
+                            <i class="fas fa-clipboard-list"></i> Go to Occurrences
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Assessment Section -->
+            <div id="risk" class="section">
+                <h2><i class="fas fa-bullseye"></i> Risk Assessment</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="riskSearchForm">
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select class="form-control" id="riskSearchCategory">
+                                <option value="">All Categories</option>
+                                <option value="Safety">Safety</option>
+                                <option value="Security">Security</option>
+                                <option value="Operational">Operational</option>
+                                <option value="Financial">Financial</option>
+                                <option value="Reputational">Reputational</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Risk Level:</label>
+                            <select class="form-control" id="riskSearchLevel">
+                                <option value="">All Levels</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="riskSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="riskSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchRiskData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetRiskSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Risk Assessment</h3>
+                    <form id="riskForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Risk ID:</label>
+                                <input type="text" class="form-control" id="riskId" placeholder="e.g., RISK-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Risk Category:</label>
+                                <select class="form-control" id="riskCategory" required>
+                                    <option value="Safety">Safety</option>
+                                    <option value="Security">Security</option>
+                                    <option value="Operational">Operational</option>
+                                    <option value="Financial">Financial</option>
+                                    <option value="Reputational">Reputational</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Risk Description:</label>
+                            <textarea class="form-control" id="riskDesc" rows="3" placeholder="Describe the risk..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Likelihood:</label>
+                                <select class="form-control" id="riskLikelihood" required>
+                                    <option value="1">1 - Rare</option>
+                                    <option value="2">2 - Unlikely</option>
+                                    <option value="3">3 - Possible</option>
+                                    <option value="4">4 - Likely</option>
+                                    <option value="5">5 - Almost Certain</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Severity:</label>
+                                <select class="form-control" id="riskSeverity" required>
+                                    <option value="1">1 - Insignificant</option>
+                                    <option value="2">2 - Minor</option>
+                                    <option value="3">3 - Moderate</option>
+                                    <option value="4">4 - Major</option>
+                                    <option value="5">5 - Catastrophic</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Risk Level:</label>
+                                <input type="text" class="form-control" id="riskLevel" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mitigation Measures:</label>
+                            <textarea class="form-control" id="riskMitigation" rows="3" placeholder="Describe mitigation measures..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Responsible Person:</label>
+                                <input type="text" class="form-control" id="riskResponsible" placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label>Due Date:</label>
+                                <input type="date" class="form-control" id="riskDueDate">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Risk
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Risk Assessments</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Risk Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="riskUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewRiskData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadRiskData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="riskPreview" style="display: none;">
+                            <h4>Preview of Risk Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="riskPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Risk ID</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Likelihood</th>
+                                            <th>Severity</th>
+                                            <th>Risk Level</th>
+                                            <th>Mitigation</th>
+                                            <th>Responsible</th>
+                                            <th>Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="riskPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Risk Assessment Matrix</h3>
+                    <div class="table-container">
+                        <table class="table" id="riskTable">
+                            <thead>
+                                <tr>
+                                    <th>Risk ID</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Likelihood</th>
+                                    <th>Severity</th>
+                                    <th>Risk Level</th>
+                                    <th>Mitigation</th>
+                                    <th>Responsible</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riskTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Occurrences Section -->
+            <div id="occurrences" class="section">
+                <h2><i class="fas fa-clipboard-list"></i> Occurrence Reporting</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="occurrenceSearchForm">
+                        <div class="form-group">
+                            <label>Occurrence Type:</label>
+                            <select class="form-control" id="occurrenceSearchType">
+                                <option value="">All Types</option>
+                                <option value="Ground Damage">Ground Damage</option>
+                                <option value="DG Incident">DG Incident</option>
+                                <option value="Loading Error">Loading Error</option>
+                                <option value="Documentation Error">Documentation Error</option>
+                                <option value="Security Breach">Security Breach</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Severity:</label>
+                            <select class="form-control" id="occurrenceSearchSeverity">
+                                <option value="">All Severities</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="occurrenceSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="occurrenceSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchOccurrenceData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetOccurrenceSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Occurrence</h3>
+                    <form id="occurrenceForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Occurrence ID:</label>
+                                <input type="text" class="form-control" id="occurrenceId" placeholder="e.g., OCC-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Date & Time:</label>
+                                <input type="datetime-local" class="form-control" id="occurrenceDateTime" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Occurrence Type:</label>
+                                <select class="form-control" id="occurrenceType" required>
+                                    <option value="Ground Damage">Ground Damage</option>
+                                    <option value="DG Incident">DG Incident</option>
+                                    <option value="Loading Error">Loading Error</option>
+                                    <option value="Documentation Error">Documentation Error</option>
+                                    <option value="Security Breach">Security Breach</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Severity:</label>
+                                <select class="form-control" id="occurrenceSeverity" required>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" id="occurrenceDesc" rows="3" placeholder="Describe the occurrence..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location:</label>
+                                <input type="text" class="form-control" id="occurrenceLocation" placeholder="e.g., DEL Cargo Terminal" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Flight No:</label>
+                                <input type="text" class="form-control" id="occurrenceFlight" placeholder="e.g., AI101">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Immediate Actions:</label>
+                            <textarea class="form-control" id="occurrenceActions" rows="3" placeholder="Describe immediate actions taken..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Occurrence
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Occurrences</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Occurrence Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="occurrenceUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewOccurrenceData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadOccurrenceData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="occurrencePreview" style="display: none;">
+                            <h4>Preview of Occurrence Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="occurrencePreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Occurrence ID</th>
+                                            <th>Date & Time</th>
+                                            <th>Type</th>
+                                            <th>Severity</th>
+                                            <th>Description</th>
+                                            <th>Location</th>
+                                            <th>Flight No</th>
+                                            <th>Immediate Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="occurrencePreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Occurrence List</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('occurrenceTable', 'Occurrences')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('occurrenceTable', 'Occurrences')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="occurrenceTable">
+                            <thead>
+                                <tr>
+                                    <th>Occurrence ID</th>
+                                    <th>Date & Time</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Description</th>
+                                    <th>Location</th>
+                                    <th>Flight No</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="occurrenceTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAG Section -->
+            <div id="sag" class="section">
+                <h2><i class="fas fa-users"></i> Safety Action Group (SAG)</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="sagSearchForm">
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="sagSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="sagSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchSAGData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetSAGSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add SAG Meeting</h3>
+                    <form id="sagForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Meeting ID:</label>
+                                <input type="text" class="form-control" id="sagId" placeholder="e.g., SAG-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <input type="date" class="form-control" id="sagDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Agenda:</label>
+                            <textarea class="form-control" id="sagAgenda" rows="3" placeholder="Meeting agenda..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Attendees:</label>
+                            <textarea class="form-control" id="sagAttendees" rows="2" placeholder="List of attendees..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Key Decisions:</label>
+                            <textarea class="form-control" id="sagDecisions" rows="3" placeholder="Key decisions made..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Action Items:</label>
+                            <textarea class="form-control" id="sagActions" rows="3" placeholder="Action items with responsible persons..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Meeting
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple SAG Meetings</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk SAG Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="sagUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewSAGData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadSAGData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="sagPreview" style="display: none;">
+                            <h4>Preview of SAG Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="sagPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Meeting ID</th>
+                                            <th>Date</th>
+                                            <th>Agenda</th>
+                                            <th>Attendees</th>
+                                            <th>Key Decisions</th>
+                                            <th>Action Items</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sagPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>SAG Meetings</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('sagTable', 'SAG_Meetings')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('sagTable', 'SAG_Meetings')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="sagTable">
+                            <thead>
+                                <tr>
+                                    <th>Meeting ID</th>
+                                    <th>Date</th>
+                                    <th>Agenda</th>
+                                    <th>Attendees</th>
+                                    <th>Key Decisions</th>
+                                    <th>Action Items</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sagTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly SMS & QMS Dashboard Section -->
+            <div id="monthly-dashboard" class="section">
+                <h2><i class="fas fa-chart-line"></i> Monthly SMS & QMS Dashboard</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="dashboardSearchForm">
+                        <div class="form-group">
+                            <label>Dashboard Type:</label>
+                            <select class="form-control" id="dashboardSearchType">
+                                <option value="">All Types</option>
+                                <option value="SMS Dashboard">SMS Dashboard</option>
+                                <option value="QMS Dashboard">QMS Dashboard</option>
+                                <option value="Operational Dashboard">Operational Dashboard</option>
+                                <option value="Compliance Dashboard">Compliance Dashboard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Month:</label>
+                            <select class="form-control" id="dashboardSearchMonth">
+                                <option value="">All Months</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Year:</label>
+                            <input type="number" class="form-control" id="dashboardSearchYear" placeholder="e.g., 2024" min="2020" max="2030">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchDashboardData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetDashboardSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Dashboard Overview</h3>
+                    <div class="dashboard-performance">
+                        <div class="dashboard-performance-card">
+                            <div class="dashboard-performance-title">SMS Dashboard</div>
+                            <div class="performance-indicator">
+                                <div class="performance-bar">
+                                    <div class="performance-fill performance-excellent" style="width: 92%"></div>
+                                </div>
+                                <div class="performance-value">92%</div>
+                            </div>
+                            <p>Compliance with safety requirements and procedures</p>
+                        </div>
+                        <div class="dashboard-performance-card">
+                            <div class="dashboard-performance-title">QMS Dashboard</div>
+                            <div class="performance-indicator">
+                                <div class="performance-bar">
+                                    <div class="performance-fill performance-good" style="width: 85%"></div>
+                                </div>
+                                <div class="performance-value">85%</div>
+                            </div>
+                            <p>Quality management system effectiveness</p>
+                        </div>
+                        <div class="dashboard-performance-card">
+                            <div class="dashboard-performance-title">Operational Dashboard</div>
+                            <div class="performance-indicator">
+                                <div class="performance-bar">
+                                    <div class="performance-fill performance-excellent" style="width: 95%"></div>
+                                </div>
+                                <div class="performance-value">95%</div>
+                            </div>
+                            <p>Operational performance metrics</p>
+                        </div>
+                        <div class="dashboard-performance-card">
+                            <div class="dashboard-performance-title">Compliance Dashboard</div>
+                            <div class="performance-indicator">
+                                <div class="performance-bar">
+                                    <div class="performance-fill performance-good" style="width: 88%"></div>
+                                </div>
+                                <div class="performance-value">88%</div>
+                            </div>
+                            <p>Regulatory compliance status</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="indicator-key">
+                    <h4><i class="fas fa-key"></i> Dashboard Indicators Key</h4>
+                    <div class="indicator-list">
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 1:</span> Safety Training Completion Rate
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 2:</span> Incident Reporting Rate
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 3:</span> Risk Assessment Completion
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 4:</span> Audit Findings Closure Rate
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 5:</span> Safety Equipment Availability
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 6:</span> Emergency Response Drill Performance
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 7:</span> Safety Communication Effectiveness
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 8:</span> Employee Safety Perception
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 9:</span> Regulatory Compliance Rate
+                        </div>
+                        <div class="indicator-item">
+                            <span class="indicator-name">Indicator 10:</span> Safety Investment ROI
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Dashboard Data</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Dashboard Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="dashboardUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewDashboardData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadDashboardData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="dashboardPreview" style="display: none;">
+                            <h4>Preview of Dashboard Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="dashboardPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Dashboard ID</th>
+                                            <th>Dashboard Type</th>
+                                            <th>Month</th>
+                                            <th>Year</th>
+                                            <th>Indicator 1</th>
+                                            <th>Indicator 2</th>
+                                            <th>Indicator 3</th>
+                                            <th>Indicator 4</th>
+                                            <th>Indicator 5</th>
+                                            <th>Indicator 6</th>
+                                            <th>Indicator 7</th>
+                                            <th>Indicator 8</th>
+                                            <th>Indicator 9</th>
+                                            <th>Indicator 10</th>
+                                            <th>Overall Score</th>
+                                            <th>Status</th>
+                                            <th>Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Dashboard Data</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('dashboardTable', 'Dashboard_Data')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('dashboardTable', 'Dashboard_Data')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="dashboardTable">
+                            <thead>
+                                <tr>
+                                    <th>Dashboard ID</th>
+                                    <th>Dashboard Type</th>
+                                    <th>Month</th>
+                                    <th>Year</th>
+                                    <th>Indicator 1</th>
+                                    <th>Indicator 2</th>
+                                    <th>Indicator 3</th>
+                                    <th>Indicator 4</th>
+                                    <th>Indicator 5</th>
+                                    <th>Indicator 6</th>
+                                    <th>Indicator 7</th>
+                                    <th>Indicator 8</th>
+                                    <th>Indicator 9</th>
+                                    <th>Indicator 10</th>
+                                    <th>Overall Score</th>
+                                    <th>Status</th>
+                                    <th>Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboardTableBody">
+                                <!-- Sample data for demonstration -->
+                                <tr>
+                                    <td>DB-SMS-2024-01</td>
+                                    <td>SMS Dashboard</td>
+                                    <td>January</td>
+                                    <td>2024</td>
+                                    <td>95%</td>
+                                    <td>92%</td>
+                                    <td>88%</td>
+                                    <td>96%</td>
+                                    <td>90%</td>
+                                    <td>94%</td>
+                                    <td>89%</td>
+                                    <td>93%</td>
+                                    <td>91%</td>
+                                    <td>95%</td>
+                                    <td>92%</td>
+                                    <td><span class="status-completed">Completed</span></td>
+                                    <td>All safety indicators within acceptable limits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOC Section -->
+            <div id="moc" class="section">
+                <h2><i class="fas fa-exchange-alt"></i> Management of Change (MOC)</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="mocSearchForm">
+                        <div class="form-group">
+                            <label>Change Type:</label>
+                            <select class="form-control" id="mocSearchType">
+                                <option value="">All Types</option>
+                                <option value="Process">Process Change</option>
+                                <option value="System">System Change</option>
+                                <option value="Organization">Organization Change</option>
+                                <option value="Equipment">Equipment Change</option>
+                                <option value="Procedure">Procedure Change</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" id="mocSearchStatus">
+                                <option value="">All Statuses</option>
+                                <option value="Planned">Planned</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="mocSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="mocSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchMOCData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetMOCSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add MOC Record</h3>
+                    <form id="mocForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Change ID:</label>
+                                <input type="text" class="form-control" id="mocId" placeholder="e.g., MOC-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Change Type:</label>
+                                <select class="form-control" id="mocType" required>
+                                    <option value="Process">Process Change</option>
+                                    <option value="System">System Change</option>
+                                    <option value="Organization">Organization Change</option>
+                                    <option value="Equipment">Equipment Change</option>
+                                    <option value="Procedure">Procedure Change</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description of Change:</label>
+                            <textarea class="form-control" id="mocDesc" rows="3" placeholder="Describe the change..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Risk Assessment Required:</label>
+                                <select class="form-control" id="mocRiskAssessment" required>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select class="form-control" id="mocStatus" required>
+                                    <option value="Planned">Planned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="On Hold">On Hold</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Planned Date:</label>
+                                <input type="date" class="form-control" id="mocPlannedDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Actual Date:</label>
+                                <input type="date" class="form-control" id="mocActualDate">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save MOC
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple MOC Records</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk MOC Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="mocUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewMOCData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadMOCData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="mocPreview" style="display: none;">
+                            <h4>Preview of MOC Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="mocPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Change ID</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>Risk Assessment</th>
+                                            <th>Status</th>
+                                            <th>Planned Date</th>
+                                            <th>Actual Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mocPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>MOC Records</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('mocTable', 'MOC_Records')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('mocTable', 'MOC_Records')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="mocTable">
+                            <thead>
+                                <tr>
+                                    <th>Change ID</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Risk Assessment</th>
+                                    <th>Status</th>
+                                    <th>Planned Date</th>
+                                    <th>Actual Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mocTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audits Section -->
+            <div id="audits" class="section">
+                <h2><i class="fas fa-search"></i> Audits & Inspections</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="auditSearchForm">
+                        <div class="form-group">
+                            <label>Audit Type:</label>
+                            <select class="form-control" id="auditSearchType">
+                                <option value="">All Types</option>
+                                <option value="Internal">Internal</option>
+                                <option value="External">External</option>
+                                <option value="Regulatory">Regulatory</option>
+                                <option value="Supplier">Supplier</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" id="auditSearchStatus">
+                                <option value="">All Statuses</option>
+                                <option value="Planned">Planned</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="auditSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="auditSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchAuditData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetAuditSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Audit</h3>
+                    <form id="auditForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Audit ID:</label>
+                                <input type="text" class="form-control" id="auditId" placeholder="e.g., AUDIT-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Audit Type:</label>
+                                <select class="form-control" id="auditType" required>
+                                    <option value="Internal">Internal</option>
+                                    <option value="External">External</option>
+                                    <option value="Regulatory">Regulatory</option>
+                                    <option value="Supplier">Supplier</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Audit Scope:</label>
+                            <textarea class="form-control" id="auditScope" rows="3" placeholder="Describe audit scope..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Planned Date:</label>
+                                <input type="date" class="form-control" id="auditPlannedDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Actual Date:</label>
+                                <input type="date" class="form-control" id="auditActualDate">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Auditors:</label>
+                                <input type="text" class="form-control" id="auditAuditors" placeholder="Names of auditors" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select class="form-control" id="auditStatus" required>
+                                    <option value="Planned">Planned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Findings Count:</label>
+                                <input type="number" class="form-control" id="auditFindings" min="0" placeholder="Number of findings">
+                            </div>
+                            <div class="form-group">
+                                <label>Open Findings:</label>
+                                <input type="number" class="form-control" id="auditOpenFindings" min="0" placeholder="Number of open findings">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Audit
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Audits</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Audit Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="auditUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewAuditData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadAuditData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="auditPreview" style="display: none;">
+                            <h4>Preview of Audit Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="auditPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Audit ID</th>
+                                            <th>Type</th>
+                                            <th>Scope</th>
+                                            <th>Planned Date</th>
+                                            <th>Actual Date</th>
+                                            <th>Auditors</th>
+                                            <th>Status</th>
+                                            <th>Findings</th>
+                                            <th>Open Findings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="auditPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Audit List</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('auditTable', 'Audits')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('auditTable', 'Audits')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="auditTable">
+                            <thead>
+                                <tr>
+                                    <th>Audit ID</th>
+                                    <th>Type</th>
+                                    <th>Scope</th>
+                                    <th>Planned Date</th>
+                                    <th>Actual Date</th>
+                                    <th>Auditors</th>
+                                    <th>Status</th>
+                                    <th>Findings</th>
+                                    <th>Open Findings</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SPI Section -->
+            <div id="spi" class="section">
+                <h2><i class="fas fa-chart-bar"></i> Safety Performance Indicators (SPI)</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="spiSearchForm">
+                        <div class="form-group">
+                            <label>SPI Category:</label>
+                            <select class="form-control" id="spiSearchCategory">
+                                <option value="">All Categories</option>
+                                <option value="Operational">Operational</option>
+                                <option value="Safety">Safety</option>
+                                <option value="Quality">Quality</option>
+                                <option value="Compliance">Compliance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Period:</label>
+                            <select class="form-control" id="spiSearchPeriod">
+                                <option value="">All Periods</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Quarterly">Quarterly</option>
+                                <option value="Annual">Annual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="spiSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="spiSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchSPIData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetSPISearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add SPI Data</h3>
+                    <form id="spiForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>SPI ID:</label>
+                                <input type="text" class="form-control" id="spiId" placeholder="e.g., SPI-2024-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>SPI Category:</label>
+                                <select class="form-control" id="spiCategory" required>
+                                    <option value="Operational">Operational</option>
+                                    <option value="Safety">Safety</option>
+                                    <option value="Quality">Quality</option>
+                                    <option value="Compliance">Compliance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>SPI Description:</label>
+                            <textarea class="form-control" id="spiDesc" rows="3" placeholder="Describe the SPI..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Target Value:</label>
+                                <input type="number" class="form-control" id="spiTarget" step="0.01" placeholder="Target value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Actual Value:</label>
+                                <input type="number" class="form-control" id="spiActual" step="0.01" placeholder="Actual value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit:</label>
+                                <input type="text" class="form-control" id="spiUnit" placeholder="e.g., %, number, days" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Period:</label>
+                                <select class="form-control" id="spiPeriod" required>
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Quarterly">Quarterly</option>
+                                    <option value="Annual">Annual</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <input type="date" class="form-control" id="spiDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <input type="text" class="form-control" id="spiStatus" readonly>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save SPI
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple SPI Data</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk SPI Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="spiUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewSPIData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadSPIData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="spiPreview" style="display: none;">
+                            <h4>Preview of SPI Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="spiPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SPI ID</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Target</th>
+                                            <th>Actual</th>
+                                            <th>Unit</th>
+                                            <th>Period</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="spiPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>SPI Data</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('spiTable', 'SPI_Data')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('spiTable', 'SPI_Data')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="spiTable">
+                            <thead>
+                                <tr>
+                                    <th>SPI ID</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Target</th>
+                                    <th>Actual</th>
+                                    <th>Unit</th>
+                                    <th>Period</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="spiTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outstation Section -->
+            <div id="outstation" class="section">
+                <h2><i class="fas fa-building"></i> Outstation Monitoring</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="outstationSearchForm">
+                        <div class="form-group">
+                            <label>Station Code:</label>
+                            <input type="text" class="form-control" id="outstationSearchCode" placeholder="e.g., DEL">
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="outstationSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="outstationSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchOutstationData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetOutstationSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Outstation</h3>
+                    <form id="outstationForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Station Code:</label>
+                                <input type="text" class="form-control" id="stationCode" placeholder="e.g., DEL" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Agent Name:</label>
+                                <input type="text" class="form-control" id="agentName" placeholder="Enter agent name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Safety Risks Identified:</label>
+                            <textarea class="form-control" id="safetyRisks" rows="3" placeholder="Describe safety risks..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Last Audit Date:</label>
+                                <input type="date" class="form-control" id="lastAudit">
+                            </div>
+                            <div class="form-group">
+                                <label>Audit Score (%):</label>
+                                <input type="number" class="form-control" id="auditScore" min="0" max="100" placeholder="0-100">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Open Findings:</label>
+                                <input type="number" class="form-control" id="openFindings" min="0" placeholder="Number of open findings">
+                            </div>
+                            <div class="form-group">
+                                <label>DG Occurrences:</label>
+                                <input type="number" class="form-control" id="dgOccurrences" min="0" placeholder="Number of DG occurrences">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Outstation
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Outstation Data</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Outstation Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="outstationUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewOutstationData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadOutstationData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="outstationPreview" style="display: none;">
+                            <h4>Preview of Outstation Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="outstationPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Station Code</th>
+                                            <th>Agent Name</th>
+                                            <th>Safety Risks</th>
+                                            <th>Last Audit</th>
+                                            <th>Audit Score</th>
+                                            <th>Open Findings</th>
+                                            <th>DG Occurrences</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="outstationPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Outstation List</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('outstationTable', 'Outstation_List')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('outstationTable', 'Outstation_List')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="outstationTable">
+                            <thead>
+                                <tr>
+                                    <th>Station Code</th>
+                                    <th>Agent Name</th>
+                                    <th>Safety Risks</th>
+                                    <th>Last Audit</th>
+                                    <th>Audit Score</th>
+                                    <th>Open Findings</th>
+                                    <th>DG Occurrences</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="outstationTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ISARPS List Section -->
+            <div id="isarps" class="section">
+                <h2><i class="fas fa-list"></i> ISARPS List</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="isarpsSearchForm">
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" id="isarpsSearchStatus">
+                                <option value="">All Statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Risk Level:</label>
+                            <select class="form-control" id="isarpsSearchRisk">
+                                <option value="">All Levels</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="isarpsSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="isarpsSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchISARPSData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetISARPSSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add New ISARPS</h3>
+                    <form id="isarpsForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ISARPS ID:</label>
+                                <input type="text" class="form-control" id="isarpsId" placeholder="e.g., ISARPS-CARGO-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" class="form-control" id="isarpsTitle" placeholder="Enter title" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" id="isarpsDesc" rows="3" placeholder="Enter description" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Manual Reference:</label>
+                                <input type="text" class="form-control" id="isarpsManualRef" placeholder="e.g., Cargo Manual Section 4.5" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Manual Link:</label>
+                                <input type="url" class="form-control" id="isarpsManualLink" placeholder="https://portal.company.com/manuals/...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select class="form-control" id="isarpsStatus" required>
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Due Date:</label>
+                                <input type="date" class="form-control" id="isarpsDueDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Risk Level:</label>
+                                <select class="form-control" id="isarpsRisk" required>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Responsible Person:</label>
+                                <input type="text" class="form-control" id="isarpsResponsible" placeholder="Enter name" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save ISARPS
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple ISARPS</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk ISARPS Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="isarpsUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewISARPSData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadISARPSData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="isarpsPreview" style="display: none;">
+                            <h4>Preview of ISARPS Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="isarpsPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ISARPS ID</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Manual Reference</th>
+                                            <th>Status</th>
+                                            <th>Due Date</th>
+                                            <th>Risk Level</th>
+                                            <th>Responsible</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="isarpsPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>ISARPS List</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('isarpsTable', 'ISARPS_List')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('isarpsTable', 'ISARPS_List')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="isarpsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Manual Reference</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Risk Level</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="isarpsTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidences Section -->
+            <div id="evidences" class="section">
+                <h2><i class="fas fa-file-alt"></i> Implementation Evidences</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="evidenceSearchForm">
+                        <div class="form-group">
+                            <label>Evidence Type:</label>
+                            <select class="form-control" id="evidenceSearchType">
+                                <option value="">All Types</option>
+                                <option value="Picture">Picture</option>
+                                <option value="PDF">PDF</option>
+                                <option value="Excel">Excel</option>
+                                <option value="Web Link">Web Link</option>
+                                <option value="Screenshot">Screenshot</option>
+                                <option value="Audit Plan">Audit Plan</option>
+                                <option value="RCA">RCA</option>
+                                <option value="CAPA">CAPA</option>
+                                <option value="Finding">Finding</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="evidenceSearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="evidenceSearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchEvidenceData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetEvidenceSearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Upload New Evidence</h3>
+                    <form id="evidenceForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select ISARPS:</label>
+                                <select class="form-control" id="evidenceIsarps" required>
+                                    <option value="">-- Select ISARPS --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Evidence Type:</label>
+                                <select class="form-control" id="evidenceType" required>
+                                    <option value="Picture">Picture</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="Excel">Excel</option>
+                                    <option value="Web Link">Web Link</option>
+                                    <option value="Screenshot">Screenshot</option>
+                                    <option value="Audit Plan">Audit Plan</option>
+                                    <option value="RCA">RCA</option>
+                                    <option value="CAPA">CAPA</option>
+                                    <option value="Finding">Finding</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" id="evidenceDesc" rows="3" placeholder="Describe the evidence..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload File:</label>
+                            <input type="file" class="form-control" id="evidenceFile">
+                        </div>
+                        <div class="form-group">
+                            <label>Date:</label>
+                            <input type="date" class="form-control" id="evidenceDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Evidence
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Evidences</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Evidence Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="evidenceUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewEvidenceData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadEvidenceData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="evidencePreview" style="display: none;">
+                            <h4>Preview of Evidence Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="evidencePreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ISARPS ID</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="evidencePreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Evidence List</h3>
+                    <div id="evidenceList">
+                        <!-- Evidence items will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Promotion Section -->
+            <div id="safety" class="section">
+                <h2><i class="fas fa-bullhorn"></i> Safety Promotion</h2>
+                
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <form class="search-form" id="safetySearchForm">
+                        <div class="form-group">
+                            <label>Activity Type:</label>
+                            <select class="form-control" id="safetySearchType">
+                                <option value="">All Types</option>
+                                <option value="Training">Training</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Bulletin">Bulletin</option>
+                                <option value="Meeting">Meeting</option>
+                                <option value="Campaign">Campaign</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" id="safetySearchFrom">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" id="safetySearchTo">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-info" onclick="searchSafetyData()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetSafetySearch()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Safety Promotion Activity</h3>
+                    <form id="safetyForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Activity Type:</label>
+                                <select class="form-control" id="safetyType" required>
+                                    <option value="Training">Training</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Bulletin">Bulletin</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Campaign">Campaign</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <input type="date" class="form-control" id="safetyDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <input type="text" class="form-control" id="safetyTitle" placeholder="Enter activity title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" id="safetyDesc" rows="3" placeholder="Describe the activity..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Target Audience:</label>
+                                <input type="text" class="form-control" id="safetyAudience" placeholder="e.g., Cargo Staff, Ground Handlers" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Participants Count:</label>
+                                <input type="number" class="form-control" id="safetyParticipants" min="0" placeholder="Number of participants">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Activity
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Upload Multiple Safety Activities</h3>
+                    <div class="upload-dashboard-section">
+                        <div class="upload-instructions">
+                            <h4>Instructions for Bulk Safety Data Upload</h4>
+                            <ul>
+                                <li>Prepare your data in Excel format with the required columns</li>
+                                <li>Ensure data follows the correct format for each column</li>
+                                <li>Select the Excel file using the file picker below</li>
+                                <li>Click "Preview Data" to verify before uploading</li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-upload-form">
+                            <div class="form-group">
+                                <label>Select Excel File:</label>
+                                <input type="file" class="form-control" id="safetyUploadFile" accept=".xlsx, .xls">
+                            </div>
+                            <button class="btn btn-info" onclick="previewSafetyData()">
+                                <i class="fas fa-eye"></i> Preview Data
+                            </button>
+                            <button class="btn btn-success" onclick="uploadSafetyData()">
+                                <i class="fas fa-upload"></i> Upload & Save
+                            </button>
+                        </div>
+                        <div class="dashboard-preview" id="safetyPreview" style="display: none;">
+                            <h4>Preview of Safety Data</h4>
+                            <div class="full-preview-container">
+                                <table class="preview-table" id="safetyPreviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Date</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Audience</th>
+                                            <th>Participants</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="safetyPreviewBody">
+                                        <!-- Preview data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Safety Promotion Activities</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-info" onclick="exportToExcel('safetyTable', 'Safety_Promotion')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-info" onclick="exportToCSV('safetyTable', 'Safety_Promotion')">
+                            <i class="fas fa-file-csv"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="safetyTable">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Audience</th>
+                                    <th>Participants</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="safetyTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholder sections for other pillars -->
+            <div id="safety-policy" class="section">
+                <div class="card">
+                    <h2><i class="fas fa-cog"></i> Safety Policy & Management Review</h2>
+                    <p>This section contains management-level safety policies and review processes.</p>
+                    <p>Use the navigation menu or the links below to access specific sub-sections:</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="showSection('sag')">
+                            <i class="fas fa-users"></i> Go to SAG
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('monthly-dashboard')">
+                            <i class="fas fa-chart-line"></i> Go to Monthly Dashboard
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('moc')">
+                            <i class="fas fa-exchange-alt"></i> Go to MOC
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="safety-assurance" class="section">
+                <div class="card">
+                    <h2><i class="fas fa-shield-alt"></i> Safety Assurance</h2>
+                    <p>This section contains safety assurance activities and monitoring processes.</p>
+                    <p>Use the navigation menu or the links below to access specific sub-sections:</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="showSection('audits')">
+                            <i class="fas fa-search"></i> Go to Audits
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('spi')">
+                            <i class="fas fa-chart-bar"></i> Go to SPI
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('outstation')">
+                            <i class="fas fa-building"></i> Go to Outstation
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('isarps')">
+                            <i class="fas fa-list"></i> Go to ISARPS List
+                        </button>
+                        <button class="btn btn-info" onclick="showSection('evidences')">
+                            <i class="fas fa-file-alt"></i> Go to Evidences
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            isarps: [],
+            evidences: [],
+            outstations: [],
+            safetyActivities: [],
+            mocRecords: [],
+            sagMeetings: [],
+            risks: [],
+            spis: [],
+            occurrences: [],
+            audits: [],
+            dashboards: [],
+            user: null
+        };
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const homePage = document.getElementById('home-page');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('loginForm');
+        const userDisplay = document.getElementById('userDisplay');
+
+        // Login Functionality
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple authentication
+            if (username === 'admin' && password === 'safety2024') {
+                state.user = { username: username, role: 'Administrator' };
+                userDisplay.textContent = `Welcome, ${state.user.username}`;
+                loginPage.style.display = 'none';
+                homePage.style.display = 'flex';
+                loadSampleData();
+            } else {
+                alert('Invalid credentials. Please use admin/safety2024');
+            }
+        });
+
+        // Navigation Functions
+        function showHomePage() {
+            mainApp.style.display = 'none';
+            homePage.style.display = 'flex';
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Show main app if coming from home page
+            if (homePage.style.display !== 'none') {
+                homePage.style.display = 'none';
+                mainApp.style.display = 'block';
+            }
+            
+            // Add active class to clicked button if it exists
+            const navButtons = document.querySelectorAll('.nav-btn');
+            for (let btn of navButtons) {
+                if (btn.onclick && btn.onclick.toString().includes(sectionId)) {
+                    btn.classList.add('active');
+                    break;
+                }
+            }
+            
+            // Update dashboard if showing dashboard
+            if (sectionId === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        function logout() {
+            state.user = null;
+            mainApp.style.display = 'none';
+            homePage.style.display = 'none';
+            loginPage.style.display = 'flex';
+            loginForm.reset();
+        }
+
+        // Load Sample Data
+        function loadSampleData() {
+            // Sample ISARPS data
+            state.isarps = [
+                {
+                    id: 'ISARPS-CARGO-001',
+                    title: 'Cargo Loading Procedures',
+                    description: 'Implementation of standardized cargo loading procedures as per ISARPS 18th Edition',
+                    manualRef: 'Cargo Manual Section 4.5',
+                    manualLink: 'https://portal.company.com/manuals/cargo-section-4.5',
+                    status: 'Completed',
+                    dueDate: '2024-03-15',
+                    risk: 'Medium',
+                    responsible: 'John Smith'
+                },
+                {
+                    id: 'ISARPS-CARGO-002',
+                    title: 'Dangerous Goods Handling',
+                    description: 'Updated procedures for dangerous goods identification, documentation and handling',
+                    manualRef: 'DG Manual Section 3.2',
+                    manualLink: 'https://portal.company.com/manuals/dg-section-3.2',
+                    status: 'In Progress',
+                    dueDate: '2024-04-30',
+                    risk: 'High',
+                    responsible: 'Sarah Johnson'
+                },
+                {
+                    id: 'ISARPS-CARGO-003',
+                    title: 'Uld Management System',
+                    description: 'Implementation of enhanced ULD tracking and management system',
+                    manualRef: 'Ground Operations Manual Section 7.1',
+                    manualLink: 'https://portal.company.com/manuals/ground-ops-section-7.1',
+                    status: 'Pending',
+                    dueDate: '2024-05-15',
+                    risk: 'Low',
+                    responsible: 'Mike Davis'
+                }
+            ];
+
+            // Sample Risk data
+            state.risks = [
+                {
+                    id: 'RISK-2024-001',
+                    category: 'Safety',
+                    description: 'Inadequate training for new cargo handling equipment',
+                    likelihood: 3,
+                    severity: 4,
+                    level: 'High',
+                    mitigation: 'Implement comprehensive training program with certification',
+                    responsible: 'Training Manager',
+                    dueDate: '2024-06-30'
+                },
+                {
+                    id: 'RISK-2024-002',
+                    category: 'Operational',
+                    description: 'Potential ULD tracking system failure during peak operations',
+                    likelihood: 2,
+                    severity: 3,
+                    level: 'Medium',
+                    mitigation: 'Implement backup manual tracking system',
+                    responsible: 'IT Manager',
+                    dueDate: '2024-05-15'
+                }
+            ];
+
+            // Sample Dashboard data
+            state.dashboards = [
+                {
+                    id: 'DB-SMS-2024-01',
+                    type: 'SMS Dashboard',
+                    month: 'January',
+                    year: '2024',
+                    indicator1: '95%',
+                    indicator2: '92%',
+                    indicator3: '88%',
+                    indicator4: '96%',
+                    indicator5: '90%',
+                    indicator6: '94%',
+                    indicator7: '89%',
+                    indicator8: '93%',
+                    indicator9: '91%',
+                    indicator10: '95%',
+                    overallScore: '92%',
+                    status: 'Completed',
+                    comments: 'All safety indicators within acceptable limits'
+                }
+            ];
+
+            // Update UI with sample data
+            updateISARPSTable();
+            updateRiskTable();
+            updateDashboardTable();
+            updateDashboard();
+        }
+
+        // Update Dashboard
+        function updateDashboard() {
+            const totalIsarps = state.isarps.length;
+            const completedIsarps = state.isarps.filter(item => item.status === 'Completed').length;
+            const progressIsarps = state.isarps.filter(item => item.status === 'In Progress').length;
+            const pendingIsarps = state.isarps.filter(item => item.status === 'Pending').length;
+            
+            document.getElementById('totalIsarps').textContent = totalIsarps;
+            document.getElementById('completedIsarps').textContent = completedIsarps;
+            document.getElementById('progressIsarps').textContent = progressIsarps;
+            document.getElementById('pendingIsarps').textContent = pendingIsarps;
+            
+            const progressPercent = totalIsarps > 0 ? Math.round((completedIsarps / totalIsarps) * 100) : 0;
+            document.getElementById('progressBar').style.width = `${progressPercent}%`;
+            document.getElementById('progressText').textContent = `${progressPercent}% Complete (${completedIsarps} of ${totalIsarps} ISARPS implemented)`;
+            
+            // Update recent activities
+            const recentActivities = document.getElementById('recentActivities');
+            recentActivities.innerHTML = '';
+            
+            if (state.isarps.length > 0) {
+                state.isarps.slice(0, 5).forEach(isarps => {
+                    const li = document.createElement('li');
+                    li.style.padding = '10px';
+                    li.style.borderBottom = '1px solid #eee';
+                    li.innerHTML = `<strong>${isarps.id}</strong>: ${isarps.title} - <span class="status-${isarps.status.toLowerCase().replace(' ', '-')}">${isarps.status}</span>`;
+                    recentActivities.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.style.padding = '10px';
+                li.style.borderBottom = '1px solid #eee';
+                li.textContent = 'No activities yet';
+                recentActivities.appendChild(li);
+            }
+            
+            // Initialize charts
+            initializeCharts();
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Occurrence Trend Chart
+            const occurrenceCtx = document.getElementById('occurrenceChart');
+            if (occurrenceCtx) {
+                new Chart(occurrenceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Occurrences',
+                            data: [5, 3, 7, 4, 6, 2],
+                            borderColor: '#1f77b4',
+                            backgroundColor: 'rgba(31, 119, 180, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Occurrences'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // SPI Trend Chart
+            const spiCtx = document.getElementById('spiChart');
+            if (spiCtx) {
+                new Chart(spiCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Safety', 'Quality', 'Operational', 'Compliance'],
+                        datasets: [{
+                            label: 'SPI Score (%)',
+                            data: [92, 85, 95, 88],
+                            backgroundColor: [
+                                'rgba(40, 167, 69, 0.7)',
+                                'rgba(255, 193, 7, 0.7)',
+                                'rgba(23, 162, 184, 0.7)',
+                                'rgba(108, 117, 125, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(40, 167, 69)',
+                                'rgb(255, 193, 7)',
+                                'rgb(23, 162, 184)',
+                                'rgb(108, 117, 125)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Score (%)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Update Tables
+        function updateISARPSTable() {
+            const tbody = document.getElementById('isarpsTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                
+                state.isarps.forEach(isarps => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${isarps.id}</td>
+                        <td>${isarps.title}</td>
+                        <td>${isarps.description}</td>
+                        <td>${isarps.manualRef}</td>
+                        <td><span class="status-${isarps.status.toLowerCase().replace(' ', '-')}">${isarps.status}</span></td>
+                        <td>${formatDate(isarps.dueDate)}</td>
+                        <td><span class="risk-${isarps.risk.toLowerCase()}">${isarps.risk}</span></td>
+                        <td>
+                            <button class="btn btn-warning" onclick="editISARPS('${isarps.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteISARPS('${isarps.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function updateRiskTable() {
+            const tbody = document.getElementById('riskTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                
+                state.risks.forEach(risk => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${risk.id}</td>
+                        <td>${risk.category}</td>
+                        <td>${risk.description}</td>
+                        <td>${risk.likelihood}</td>
+                        <td>${risk.severity}</td>
+                        <td><span class="risk-${risk.level.toLowerCase()}">${risk.level}</span></td>
+                        <td>${risk.mitigation}</td>
+                        <td>${risk.responsible}</td>
+                        <td>${formatDate(risk.dueDate)}</td>
+                        <td>
+                            <button class="btn btn-warning" onclick="editRisk('${risk.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteRisk('${risk.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function updateDashboardTable() {
+            const tbody = document.getElementById('dashboardTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                
+                state.dashboards.forEach(dashboard => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${dashboard.id}</td>
+                        <td>${dashboard.type}</td>
+                        <td>${dashboard.month}</td>
+                        <td>${dashboard.year}</td>
+                        <td>${dashboard.indicator1}</td>
+                        <td>${dashboard.indicator2}</td>
+                        <td>${dashboard.indicator3}</td>
+                        <td>${dashboard.indicator4}</td>
+                        <td>${dashboard.indicator5}</td>
+                        <td>${dashboard.indicator6}</td>
+                        <td>${dashboard.indicator7}</td>
+                        <td>${dashboard.indicator8}</td>
+                        <td>${dashboard.indicator9}</td>
+                        <td>${dashboard.indicator10}</td>
+                        <td>${dashboard.overallScore}</td>
+                        <td><span class="status-${dashboard.status.toLowerCase()}">${dashboard.status}</span></td>
+                        <td>${dashboard.comments}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        // Format Date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Export Functions
+        function exportToExcel(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (table) {
+                const ws = XLSX.utils.table_to_sheet(table);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                XLSX.writeFile(wb, `${filename}.xlsx`);
+            }
+        }
+
+        function exportToCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (table) {
+                const ws = XLSX.utils.table_to_sheet(table);
+                const csv = XLSX.utils.sheet_to_csv(ws);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${filename}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Search Functions
+        function searchRiskData() {
+            const category = document.getElementById('riskSearchCategory').value;
+            const level = document.getElementById('riskSearchLevel').value;
+            const fromDate = document.getElementById('riskSearchFrom').value;
+            const toDate = document.getElementById('riskSearchTo').value;
+            
+            // In a real application, this would filter the data based on criteria
+            alert(`Searching risk data with filters:\nCategory: ${category || 'All'}\nRisk Level: ${level || 'All'}\nFrom: ${fromDate || 'Any'}\nTo: ${toDate || 'Any'}`);
+        }
+
+        function resetRiskSearch() {
+            document.getElementById('riskSearchForm').reset();
+            // In a real application, this would reset the table to show all data
+        }
+
+        function searchOccurrenceData() {
+            const type = document.getElementById('occurrenceSearchType').value;
+            const severity = document.getElementById('occurrenceSearchSeverity').value;
+            const fromDate = document.getElementById('occurrenceSearchFrom').value;
+            const toDate = document.getElementById('occurrenceSearchTo').value;
+            
+            alert(`Searching occurrence data with filters:\nType: ${type || 'All'}\nSeverity: ${severity || 'All'}\nFrom: ${fromDate || 'Any'}\nTo: ${toDate || 'Any'}`);
+        }
+
+        function resetOccurrenceSearch() {
+            document.getElementById('occurrenceSearchForm').reset();
+        }
+
+        function searchDashboardData() {
+            const type = document.getElementById('dashboardSearchType').value;
+            const month = document.getElementById('dashboardSearchMonth').value;
+            const year = document.getElementById('dashboardSearchYear').value;
+            
+            alert(`Searching dashboard data with filters:\nType: ${type || 'All'}\nMonth: ${month || 'All'}\nYear: ${year || 'Any'}`);
+        }
+
+        function resetDashboardSearch() {
+            document.getElementById('dashboardSearchForm').reset();
+        }
+
+        // Similar search functions for other sections would be implemented here
+        function searchSAGData() { alert('Searching SAG data...'); }
+        function resetSAGSearch() { document.getElementById('sagSearchForm').reset(); }
+        
+        function searchMOCData() { alert('Searching MOC data...'); }
+        function resetMOCSearch() { document.getElementById('mocSearchForm').reset(); }
+        
+        function searchAuditData() { alert('Searching audit data...'); }
+        function resetAuditSearch() { document.getElementById('auditSearchForm').reset(); }
+        
+        function searchSPIData() { alert('Searching SPI data...'); }
+        function resetSPISearch() { document.getElementById('spiSearchForm').reset(); }
+        
+        function searchOutstationData() { alert('Searching outstation data...'); }
+        function resetOutstationSearch() { document.getElementById('outstationSearchForm').reset(); }
+        
+        function searchISARPSData() { alert('Searching ISARPS data...'); }
+        function resetISARPSSearch() { document.getElementById('isarpsSearchForm').reset(); }
+        
+        function searchEvidenceData() { alert('Searching evidence data...'); }
+        function resetEvidenceSearch() { document.getElementById('evidenceSearchForm').reset(); }
+        
+        function searchSafetyData() { alert('Searching safety data...'); }
+        function resetSafetySearch() { document.getElementById('safetySearchForm').reset(); }
+
+        // Bulk Upload Functions
+        function previewRiskData() {
+            const fileInput = document.getElementById('riskUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            document.getElementById('riskPreview').style.display = 'block';
+            const previewBody = document.getElementById('riskPreviewBody');
+            previewBody.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 20px;">
+                        <i class="fas fa-table" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                        Preview of risk data would be displayed here after file selection
+                    </td>
+                </tr>
+            `;
+        }
+
+        function uploadRiskData() {
+            const fileInput = document.getElementById('riskUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            alert('Risk data uploaded successfully!');
+            document.getElementById('riskPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewDashboardData() {
+            const fileInput = document.getElementById('dashboardUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            document.getElementById('dashboardPreview').style.display = 'block';
+            const previewBody = document.getElementById('dashboardPreviewBody');
+            previewBody.innerHTML = `
+                <tr>
+                    <td colspan="17" style="text-align: center; padding: 20px;">
+                        <i class="fas fa-table" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                        Preview of dashboard data would be displayed here after file selection
+                    </td>
+                </tr>
+            `;
+        }
+
+        function uploadDashboardData() {
+            const fileInput = document.getElementById('dashboardUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            alert('Dashboard data uploaded successfully!');
+            document.getElementById('dashboardPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // Similar upload functions for other sections
+        function previewOccurrenceData() { 
+            const fileInput = document.getElementById('occurrenceUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('occurrencePreview').style.display = 'block';
+        }
+        function uploadOccurrenceData() { 
+            const fileInput = document.getElementById('occurrenceUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('Occurrence data uploaded successfully!');
+            document.getElementById('occurrencePreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewSAGData() { 
+            const fileInput = document.getElementById('sagUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('sagPreview').style.display = 'block';
+        }
+        function uploadSAGData() { 
+            const fileInput = document.getElementById('sagUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('SAG data uploaded successfully!');
+            document.getElementById('sagPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewMOCData() { 
+            const fileInput = document.getElementById('mocUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('mocPreview').style.display = 'block';
+        }
+        function uploadMOCData() { 
+            const fileInput = document.getElementById('mocUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('MOC data uploaded successfully!');
+            document.getElementById('mocPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewAuditData() { 
+            const fileInput = document.getElementById('auditUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('auditPreview').style.display = 'block';
+        }
+        function uploadAuditData() { 
+            const fileInput = document.getElementById('auditUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('Audit data uploaded successfully!');
+            document.getElementById('auditPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewSPIData() { 
+            const fileInput = document.getElementById('spiUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('spiPreview').style.display = 'block';
+        }
+        function uploadSPIData() { 
+            const fileInput = document.getElementById('spiUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('SPI data uploaded successfully!');
+            document.getElementById('spiPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewOutstationData() { 
+            const fileInput = document.getElementById('outstationUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('outstationPreview').style.display = 'block';
+        }
+        function uploadOutstationData() { 
+            const fileInput = document.getElementById('outstationUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('Outstation data uploaded successfully!');
+            document.getElementById('outstationPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewISARPSData() { 
+            const fileInput = document.getElementById('isarpsUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('isarpsPreview').style.display = 'block';
+        }
+        function uploadISARPSData() { 
+            const fileInput = document.getElementById('isarpsUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('ISARPS data uploaded successfully!');
+            document.getElementById('isarpsPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewEvidenceData() { 
+            const fileInput = document.getElementById('evidenceUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('evidencePreview').style.display = 'block';
+        }
+        function uploadEvidenceData() { 
+            const fileInput = document.getElementById('evidenceUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('Evidence data uploaded successfully!');
+            document.getElementById('evidencePreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function previewSafetyData() { 
+            const fileInput = document.getElementById('safetyUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            document.getElementById('safetyPreview').style.display = 'block';
+        }
+        function uploadSafetyData() { 
+            const fileInput = document.getElementById('safetyUploadFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+            alert('Safety data uploaded successfully!');
+            document.getElementById('safetyPreview').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // Placeholder functions for CRUD operations
+        function editISARPS(id) {
+            alert(`Edit ISARPS: ${id} - This would open an edit form in a real application.`);
+        }
+
+        function deleteISARPS(id) {
+            if (confirm(`Are you sure you want to delete ISARPS ${id}?`)) {
+                state.isarps = state.isarps.filter(item => item.id !== id);
+                updateISARPSTable();
+                updateDashboard();
+            }
+        }
+
+        function editRisk(id) {
+            alert(`Edit Risk: ${id} - This would open an edit form in a real application.`);
+        }
+
+        function deleteRisk(id) {
+            if (confirm(`Are you sure you want to delete Risk ${id}?`)) {
+                state.risks = state.risks.filter(item => item.id !== id);
+                updateRiskTable();
+            }
+        }
+
+        // Form Submissions
+        document.getElementById('riskForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Risk assessment saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('occurrenceForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Occurrence saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('sagForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('SAG meeting saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('mocForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('MOC record saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('auditForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Audit saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('spiForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('SPI data saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('outstationForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Outstation saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('isarpsForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('ISARPS saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('evidenceForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Evidence saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        document.getElementById('safetyForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Safety activity saved successfully! In a real application, this would save to the database.');
+            this.reset();
+        });
+
+        // Risk Level Calculation
+        document.getElementById('riskLikelihood')?.addEventListener('change', calculateRiskLevel);
+        document.getElementById('riskSeverity')?.addEventListener('change', calculateRiskLevel);
+
+        function calculateRiskLevel() {
+            const likelihood = parseInt(document.getElementById('riskLikelihood')?.value) || 0;
+            const severity = parseInt(document.getElementById('riskSeverity')?.value) || 0;
+            const riskScore = likelihood * severity;
+            
+            let riskLevel = '';
+            if (riskScore <= 4) {
+                riskLevel = 'Low';
+            } else if (riskScore <= 12) {
+                riskLevel = 'Medium';
+            } else {
+                riskLevel = 'High';
+            }
+            
+            if (document.getElementById('riskLevel')) {
+                document.getElementById('riskLevel').value = riskLevel;
+            }
+        }
+
+        // SPI Status Calculation
+        document.getElementById('spiTarget')?.addEventListener('change', calculateSPIStatus);
+        document.getElementById('spiActual')?.addEventListener('change', calculateSPIStatus);
+
+        function calculateSPIStatus() {
+            const target = parseFloat(document.getElementById('spiTarget')?.value) || 0;
+            const actual = parseFloat(document.getElementById('spiActual')?.value) || 0;
+            
+            let status = '';
+            if (actual >= target) {
+                status = 'Acceptable';
+            } else if (actual >= target * 0.9) {
+                status = 'Tolerable';
+            } else {
+                status = 'Intolerable';
+            }
+            
+            if (document.getElementById('spiStatus')) {
+                document.getElementById('spiStatus').value = status;
+            }
+        }
+
+        // Initialize the application
+        window.onload = function() {
+            calculateRiskLevel();
+            calculateSPIStatus();
+        };
+    </script>
+</body>
+</html>
